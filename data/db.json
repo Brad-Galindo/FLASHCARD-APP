@@ -1,29 +1,4 @@
 {
-  "decks": [
-    {
-      "name": "2",
-      "description": "2 cards",
-      "id": 5
-    }
-  ],
-  "cards": [
-    {
-      "front": "vcvcv",
-      "back": "cvcvcv",
-      "deckId": 5,
-      "id": 1
-    },
-    {
-      "front": "Orca",
-      "back": "Killer Whale",
-      "deckId": 5,
-      "id": 2
-    },
-    {
-      "front": "Penguin",
-      "back": "Orca food",
-      "deckId": 5,
-      "id": 3
-    }
-  ]
+  "decks": [],
+  "cards": []
 }
