@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams, Link } from "react-router-dom";
-import { readCard, readDeck, deleteCard } from "../utils/api/index.js";
+import { useNavigate, useParams } from "react-router-dom";
+import { readCard, readDeck } from "../utils/api/index.js";
 import Breadcrumb from "../common/breadcrumb.js";
 import { updateCard } from "../utils/api/index.js";
 import Card from "./card.js";
@@ -21,9 +21,12 @@ const EditCards = () => {
             const deckData = await readDeck(deckId, signal);
             setDeck(deckData);
 
-            const cardData = await readCard(cardId, signal);
-            console.log(cardData);
-            setCard(cardData);
+            // Add a condition to check if cardId is not undefined, null or empty
+            if (cardId) {
+                const cardData = await readCard(cardId, signal);
+                console.log(cardData);
+                setCard(cardData);
+            }
         } catch (error) {
             console.log('Something went wrong: ', error);
         }

@@ -37,9 +37,9 @@ function Study() {
 
   return (
     <>
-      <Breadcrumb deckName={deck.name} />
+      <Breadcrumb deckName={deck.name} page={"Study"} />
       
-      <h2>{deck.name}: Study</h2>
+      <h2>Study: {deck.name}</h2>
 
       {deck.cards.length > 2 ? (
         currentCardIndex < deck.cards.length ? (

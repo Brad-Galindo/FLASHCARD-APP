@@ -28,12 +28,12 @@ const Decks = () => {
     return () => controller.abort();
   }, [deckId]);
 
-  const handleDeleteDeck = async (deckId) => {
+  const handleDeleteDeck = async () => {
     if (window.confirm("Delete this deck? You will not be able to recover it.")) {
       try {
         await deleteDeck(deckId);
+        window.location = "/";
         setDeck(deck.filter(deck => deck.id !== deckId)); // update the state, removing the deleted deck
-        navigate("/");
       } catch (error) {
         console.error(error);
       }
@@ -58,7 +58,7 @@ const Decks = () => {
         padding: '10px',
         borderRadius: '5px'
       }}>
-      <Breadcrumb deckName={deck.name} />
+      <Breadcrumb deckName={deck.name} isDeckLinked={false} />
 
       <h3>{deck.name}</h3>
       <p>{deck.description}</p>

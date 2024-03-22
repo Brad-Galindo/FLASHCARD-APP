@@ -44,7 +44,7 @@ const NewCard = () => {
 
   return (
     <>
-      <Breadcrumb deckName={deck.name} />
+      <Breadcrumb deckName={deck.name} page={"Add Card"} />
       <h1>{deck.name}: Add Card</h1>
 
       <form onSubmit={handleSave}>
