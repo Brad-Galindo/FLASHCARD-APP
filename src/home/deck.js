@@ -1,15 +1,31 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { deleteDeck } from "../utils/api";
+import {React, useState, useEffect} from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { deleteDeck } from '../utils/api/index';
 
-export const Deck = ({ deck }) => {
+function Deck({ deck, decks ,setDecks}) {
+    const [isDeleted, setIsDeleted] = useState(false);
+    const navigate = useNavigate();
+    
+
+
+
+    useEffect(() => {
+        if (isDeleted) {
+            window.location = "/";
+        }
+    }, [isDeleted, navigate]);
 
     const removeDeck = async () => {
         if (window.confirm("Delete this deck? You will not be able to recover it.")) {
-            await deleteDeck(deck.id); 
-            window.location.reload();
+            try {
+                await deleteDeck(deck.id);
+                setIsDeleted(true); // set deletion flag to true, triggering useEffect to navigate home
+            } catch (error) {
+                console.error(error);
+            }
         }
-    }
+    };
+
 
     return (
         <div className="card" key={deck.id}>

@@ -28,16 +28,22 @@ const Decks = () => {
     return () => controller.abort();
   }, [deckId]);
 
-  const handleDeleteDeck = async () => {
+  const handleDeleteDeck = async (deckId) => {
     if (window.confirm("Delete this deck? You will not be able to recover it.")) {
-      await deleteDeck(deckId);
-      navigate("/");
+      try {
+        await deleteDeck(deckId);
+        setDeck(deck.filter(deck => deck.id !== deckId)); // update the state, removing the deleted deck
+        navigate("/");
+      } catch (error) {
+        console.error(error);
+      }
     }
   };
 
   const handleDeleteCard = async (cardId) => {
     if(window.confirm("Are you sure you want to delete?")) {
       const abortController = new AbortController(); // for signalling fetch to abort the fetch call
+      window.location = `/decks/${deckId}`;
       await deleteCard(cardId, abortController.signal);
       // then refresh your deck or re-fetch your deck
     }
