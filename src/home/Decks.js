@@ -5,10 +5,12 @@ import Breadcrumb from "../common/breadcrumb.js";
 
 const Decks = () => {
   const [deck, setDeck] = useState({ cards: [] });
+  const [isLoading, setIsLoading] = useState(true);
   const { deckId } = useParams();
   const navigate = useNavigate();
 
   useEffect(() => {
+    setIsLoading(true);
     const controller = new AbortController();
     const { signal } = controller;
 
@@ -16,9 +18,11 @@ const Decks = () => {
       try {
         const response = await readDeck(deckId, signal);
         setDeck(response);
+        setIsLoading(false);
       } catch (error) {
         // Handle errors, e.g., updating an error state or showing an error message
         console.error('Error fetching deck:', error);
+        setIsLoading(false); 
       }
     };
 
@@ -50,6 +54,7 @@ const Decks = () => {
   };
 
   return (
+    isLoading ? (<div>Loading...</div>) : (
     <div
     style={{
         backgroundColor: 'lightblue',
@@ -147,6 +152,7 @@ const Decks = () => {
 ))}
     </div>
   </div>
+    )
 );
 };
 

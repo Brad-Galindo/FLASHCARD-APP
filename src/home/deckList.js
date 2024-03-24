@@ -13,7 +13,7 @@ export const DeckList = () => {
     useEffect(() => {
         const abortController = new AbortController();
 
-        listDecks(AbortController.signal)
+        listDecks(abortController.signal)
             .then(response => {
                 setDecks(response);
             })

@@ -1,8 +1,8 @@
-import {React, useState, useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { deleteDeck } from '../utils/api/index';
 
-function Deck({ deck, decks ,setDecks}) {
+function Deck({ deck }) {
     const [isDeleted, setIsDeleted] = useState(false);
     const navigate = useNavigate();
     

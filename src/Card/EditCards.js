@@ -24,7 +24,6 @@ const EditCards = () => {
             // Add a condition to check if cardId is not undefined, null or empty
             if (cardId) {
                 const cardData = await readCard(cardId, signal);
-                console.log(cardData);
                 setCard(cardData);
             }
         } catch (error) {
