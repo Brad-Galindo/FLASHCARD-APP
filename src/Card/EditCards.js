@@ -1,73 +1,76 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { readCard, readDeck } from "../utils/api/index.js";
+import { readCard, readDeck, updateCard } from "../utils/api/index.js";
 import Breadcrumb from "../common/breadcrumb.js";
-import { updateCard } from "../utils/api/index.js";
-import Card from "./card.js";
-
+import FormComponent from "../FormComponent/Form.js"; // Ensure the correct path to FormComponent
 
 const EditCards = () => {
-  const [card, setCard] = useState({ front: "", back: ""});
+  const [card, setCard] = useState({ front: "", back: "" });
   const { deckId, cardId } = useParams();
-  const [deck, setDeck] = useState({ name: "" });
+  const [deck, setDeck] = useState(null); // Initialize deck as null
   const navigate = useNavigate();
-  const abortController = new AbortController();
-  const signal = abortController.signal;
-
 
   useEffect(() => {
     const fetchDeckAndCard = async () => {
-        try {
-            const deckData = await readDeck(deckId, signal);
-            setDeck(deckData);
+      try {
+        const deckData = await readDeck(deckId);
+        setDeck(deckData);
 
-            // Add a condition to check if cardId is not undefined, null or empty
-            if (cardId) {
-                const cardData = await readCard(cardId, signal);
-                setCard(cardData);
-            }
-        } catch (error) {
-            console.log('Something went wrong: ', error);
+        if (cardId) {
+          const cardData = await readCard(cardId);
+          setCard(cardData);
         }
+      } catch (error) {
+        console.error('Something went wrong: ', error);
+      }
     };
+
     fetchDeckAndCard();
-}, [deckId, cardId]);
+
+    // Cleanup function to abort fetch requests if the component unmounts
+    return () => {
+      new AbortController().abort();
+    };
+  }, [deckId, cardId]);
+
+  const handleCancel = () => {
+    navigate(`/decks/${deckId}`);
+  };
 
   const handleSave = async (event) => {
     event.preventDefault();
-    const data = {
+    const updatedCard = {
       id: cardId,
       front: event.target.front.value,
       back: event.target.back.value,
+      deckId: Number(deckId),
     };
 
     try {
-      const newCard = await updateCard(data, signal);
-      setCard(newCard);
+      await updateCard(updatedCard);
       navigate(`/decks/${deckId}`);
     } catch (error) {
       console.error('Failed to save card. Please try again later.');
     }
   };
 
+  // Check if deck is defined before rendering the FormComponent
+  if (!deck) {
+    return <div>Loading...</div>; // Or any other loading indicator
+  }
+
   return (
-    <>
-    {card && card.id ? <Breadcrumb deckName={deck.name} page={`Edit Card ${card.id}`} /> : null}
+    <div>
+      <Breadcrumb deckName={deck.name} page={`Edit Card ${card.id}`} />
       <h1>Edit Card</h1>
-  
-      <form onSubmit={handleSave}>
-        <div className="mb-3">
-          <label htmlFor="front" className="form-label">Front</label>
-          <textarea id="front" name="front" className="form-control" placeholder="Front side of the card" defaultValue={card.front}></textarea>
-        </div>
-        <div className="mb-3">
-          <label htmlFor="back" className="form-label">Back</label>
-          <textarea id="back" name="back" className="form-control" placeholder="Back side of the card" defaultValue={card.back}></textarea>
-        </div>
-        <button type="submit" style={{ marginRight: '10px' }} className="btn btn-primary">Submit</button>
-        <button type="button" className="btn btn-secondary" onClick={() => navigate(`/decks/${deckId}`)}>Cancel</button>
-      </form>
-    </>
+      <FormComponent
+        deck={deck} // Pass the deck object to the FormComponent
+        card={card}
+        isEditing={true}
+        handleSave={handleSave}
+        handleCancel={handleCancel}
+      />
+    </div>
   );
 };
 

@@ -122,8 +122,8 @@ const Decks = () => {
     padding: '10px',
     borderRadius: '5px'
   }}>
-    <p>Question: {card.front}</p>
-    <p>Answer: {card.back}</p>
+    <p>{card.front}</p>
+    <p>{card.back}</p>
     <Link to={`/decks/${deckId}/cards/${card.id}/edit`}
       style={{
         backgroundColor: '#007bff',

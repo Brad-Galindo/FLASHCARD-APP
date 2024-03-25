@@ -200,7 +200,7 @@ export async function updateCard(updatedCard, signal) {
     headers,
     body: JSON.stringify(updatedCard),
   };
-  return await fetchJson(url, options, updatedCard);
+  return await fetchJson(url, options);
 }
 
 /**
